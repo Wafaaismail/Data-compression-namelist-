@@ -1,0 +1,28 @@
+this is a data comprisson project use Run length Techniue by c++
+
+______________________________________________________________________
+
+Encoding algorithm (4 bit lengths)
+
+1) Count the number of 0s between two 1s
+
+2) If the number is less than 15, write it down in binary form.
+
+3) If it is greater than or equal to 15, write down 1111, and a following binary number to indicate the rest of the 0s. If more than 30, repeat this process.
+
+4) If the data starts with a 1, write down 0000 at the beginning.
+
+5) If the data ends with a 1, write down 0000 at the end.
+6) Send the binary string
+
+______________________________________________________________________
+
+Decoding algorithm (4 bit lengths):
+
+Group all the bits into 4-bit groups.
+
+1) For each 4-bit group, write down that number of 0s.
+
+2) If at the end of the bit string, stop.
+
+3) If not at the end of the bit string:  If the 4-bit group was less than 15, write down a 1. Go to step 1.  If the 4-bit group is 15, go to step 1.
