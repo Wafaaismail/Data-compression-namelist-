@@ -1,0 +1,121 @@
+// this algorithm is RLE (bit level) decompression
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// this isn't a general method to convert from binary .. this method is specially for 4- 8-bit only
+int make_number (string s)
+{	if ((int)s.length()==4)
+		return ((s[0]-'0')*8)+((s[1]-'0')*4)+((s[2]-'0')*2)+((s[3]-'0')*1);
+	else if ((int)s.length()==8)
+		return  ((s[0]-'0')*128)+((s[1]-'0')*64)+((s[2]-'0')*32)+((s[3]-'0')*16)+((s[4]-'0')*8)+((s[5]-'0')*4)+((s[6]-'0')*2)+((s[7]-'0')*1);
+	return 0 ;
+}
+
+
+queue <int> number_of_zeros;
+queue <int> ascii_code ;
+
+int main() {
+	// sample //= "000100000001000000010001000001000000"; this should give (ma) as output
+
+	string s ="";
+	cin>>s;
+	//needed variables
+
+	bool is_fifteen = false ; //
+	int temp_num = 0;
+	ofstream output ("out.txt");
+	//looping on all the string to divide it into groups (each one is 4 digits) then convert them into decimal
+	//each group represents number of zeros between 2 successive ones
+
+	for(int i=0;i<(int)s.length();i+=4)
+	{
+		string temp = "" ;
+		// take each successive 4 bits to convert it to decimal
+		for(int j=i;j<i+4;j++)
+		{
+			temp+=s[j];
+		}
+		int decimal_num = make_number(temp);
+
+		// to handle that each 15 is added with its successive number
+		if (decimal_num == 15)
+		{
+			temp_num+=decimal_num;
+			is_fifteen = 1;
+		}
+		else {
+			if (is_fifteen)
+			{
+				temp_num+=decimal_num;
+				number_of_zeros.push(temp_num);
+				is_fifteen=0;
+			}
+			else
+			{
+				number_of_zeros.push(decimal_num);
+				temp_num=0;
+			}
+		}
+	}
+
+	// now we should make up the original number
+	string original_text = "" ;
+
+	// check the whether the first number is zero or not " special case "
+	if(number_of_zeros.front()==0)
+	{
+		original_text+="1";
+		number_of_zeros.pop();
+	}
+
+	int size_of_zqueue = number_of_zeros.size();
+	for (int i=0;i<size_of_zqueue;i++)
+	{
+		//checking the last element whether zero or not "special case"
+
+		//looping on the queue to get the numbers from
+		//each loop with each number we should put number of zeros in the original string = the number we got
+		int zeros = number_of_zeros.front();
+		number_of_zeros.pop();
+		////// make up the string
+		while (zeros--)
+			original_text+="0";
+
+		// last loop may be a special case so we have to check it
+		if(i==size_of_zqueue-2&&number_of_zeros.front()==0) {
+			original_text+="1";
+			number_of_zeros.pop();
+			break;
+		}
+		else original_text+="1";
+	}
+
+
+	//diving the new string into groups each one is 8 digit then we can convert it the decimal then use this as ascii code then to character
+	//here we can reuse temp_num again , it won't affect the answer at all
+
+	for (int i=0;i<(int)original_text.length();i+=8)
+	{
+		string temp = "" ;
+		for(int j=i;j<i+8;j++)
+		{
+			temp+=original_text[j];
+		}
+		temp_num=make_number(temp);
+		ascii_code.push(temp_num) ;
+	}
+
+	// to characters
+	string real_text = "" ;
+	if(!output.is_open()) output.open("out.txt",ios::out);
+	while (ascii_code.empty()==0)
+	{
+		real_text+=(char)ascii_code.front();
+		output<<(char)ascii_code.front();
+		ascii_code.pop();
+	}
+	output.close();
+	return 0;
+}
