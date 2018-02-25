@@ -2,6 +2,7 @@
 Introduction 
 	RLE bit level with name list .
 Algorithm 
+
 	compression : 
 		convert each character to its ascii code then this ascii to binary form .
 		loop on this stream and count zeros between each successive ones and save them in a container .
