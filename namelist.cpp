@@ -1,5 +1,11 @@
-﻿// namelsit.cpp : Defines the entry point for the console application.
-// Wafaa Ismail 
+// namelsit.cpp : Defines the entry point for the console application.
+//
+/*
+	butterfly team
+	wafaa ismail 
+	sec 2
+
+*/
 
 #include "stdafx.h"
 #include <iostream>
@@ -56,6 +62,7 @@ void counterCheck() //check counter of 0 , 1 to make a desion according to algor
 	}
 
 }
+double op = 0;
 void Encoding() //comprission 
 {
 	bool toggle = false; // flag to indicate 1 positions 
@@ -69,6 +76,7 @@ void Encoding() //comprission
 	while (!f1.eof()) //Do until file binary is end
 	{
 		value = f1.get(); // read char by char from binary file 
+		op += 1;
 		//cout << value;
 		if (value =='0')   // value Read is 0
 		{
@@ -108,6 +116,7 @@ void Encoding() //comprission
 
 	f1.close(); //close file
 }
+double ip = 0;
 void read_file()  //read name list file as input 
 {
 	char my_char;
@@ -124,13 +133,15 @@ void read_file()  //read name list file as input
 		cout << " the problem is at name list file !  " << endl;
 	}
 
+
 	while (fin.get(my_char)) //read values 
-	{
-		
+	{ 
+		ip += 8;
 		if (my_char == ' '||my_char =='\n') continue; //escape spaces and end of line 
-		//	cout << "wait until finish coverting ..." << endl;
+		cout << "wait until finish coverting ..." << endl;
 		fout << to_binary(my_char);           //save 8 bit at binary 
 		//cout << to_binary(my_char) << endl; //to consol 
+
 	}
 	
 	fin.close(); //close file name list 
@@ -143,6 +154,7 @@ int main()
 { 
 	read_file();
 	Encoding();
+	cout << "the Ratio is " << op/ip<<endl; //print the comprission ratio
 	while (true)
 	{
 		//open console for any warning 
